@@ -60,6 +60,11 @@ def backup_database(database_name):
     backup_filename = f'backups/{database_name.split(".")[0]}_backup_{timestamp}.zip'
 
     try:
+        # Check if the database file exists
+        if not os.path.exists(database_name):
+            log_message(f"Database '{database_name}' does not exist. Skipping backup.")
+            return
+
         # Create the backup in a work directory
         temp_backup_dir = f'temp_backup_{timestamp}'
         os.makedirs(temp_backup_dir)
@@ -95,6 +100,7 @@ def main():
         return
 
     log_message("=============Script started=============")
+    log_message(f"Database: {database_name}")
 
     if not verify_file(args.file_path):
         log_message(f"File verification failed for '{args.file_path}'", 'logs/error.log')
